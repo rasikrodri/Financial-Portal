@@ -1,0 +1,123 @@
+<!-- Header -->
+<div id="header" ng-include="'views/common/header.html'"></div>
+
+<!-- Navigation -->
+<aside id="menu" ng-include="'views/common/navigation.html'"></aside>
+
+<!-- Main Wrapper -->
+<div id="wrapper" ng-controller="householdaccountsCtrl" style="min-height: 1019px;">
+    <!--min-height: 1019px; keeps the size nice-->
+
+    <div class="content" animate-panel effect="zoomIn" ng-hide="loading.At==99 && tableManager.$scope.doneFirstRetrievingDone == true">
+        <div class="hpanel">
+            <h5 style="text-align:center">Loading Information {{loading.At}} %</h5>
+
+            <div class="m">
+                <!--<progressbar value="loading.percentage" type="success" class="progress-striped active full">{{loading.At}} %</progressbar>-->
+                <progressbar value="100" type="success" class="progress-striped active full"></progressbar>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" animate-panel effect="zoomIn" ng-if="loading.At==99 && tableManager.$scope.doneFirstRetrievingDone != false">
+
+        <div class="hpanel">
+            <h3 style="text-align:center"><strong>Accounts</strong></h3>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hpanel" style="margin-bottom: 0px;">
+                    <div class="panel-heading" style="padding-top: 0px;padding-bottom: 0px;">
+
+                        <div class="row">
+
+                            <div class="col-sm-2" style="padding-top: 12px;">
+                                <button class="btn btn-success " type="button" ng-click="createAccount()"><i class="fa fa-plus"></i> Add Account</button>
+                            </div>
+                            <div class="col-sm-4"><input type="text" style="width:100%;margin-top: 15px;" ng-model="pagingOptions.searchText" ng-change="GetAccounts()" placeholder="Search Here..."></div>
+                            <div class="col-sm-6">
+                                <style>
+                                    /*Remove the border from the table*/
+                                    .gridStyle {
+                                        border: none;
+                                        height: 0px;
+                                    }
+                                    /*rremove boreder and color from footer of the table*/
+                                    .ngFooterPanel {
+                                        border-top: none;
+                                        background-color: rgba(234, 234, 234, 0);
+                                    }
+                                    /*Make headers vertical bar invisible*/
+                                    .ngVerticalBarVisible {
+                                        background-color: rgba(212, 212, 212, 0);
+                                    }
+                                    /*Asign the color of the header text*/
+                                    .ngHeaderText {
+                                        color: #34495e;
+                                    }
+                                    /*The top pannel of the ng-grid*/
+                                    .ngTopPanel {
+                                        height: 0px;
+                                        background: rgba(212, 212, 212, 0);
+                                        border-bottom: none;
+                                        max-height: 0px;
+                                    }
+
+                                    .ngHeaderContainer {
+                                        max-height: 0px;
+                                    }
+                                    /*Hide the colimns and rows areas*/
+                                    .ngViewport {
+                                        overflow: hidden;
+                                        min-height: 0px;
+                                        max-height: 0px;
+                                    }
+                                </style>
+                                <div class="gridStyle" ng-grid="tableManager.$scope.gridOptions"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table  table-striped">
+                                <!--table-bordered-->
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th style="width: 30%;" ng-click="tableManager.$scope.SortTable('Name')"><a>Account</a></th>
+                                        <th style="width: 40%;" ng-click="tableManager.$scope.SortTable('Balance')"><a>Balance</a></th>
+                                        <th ng-click="tableManager.$scope.SortTable('ReconciledBalance')"><a>Reconciled</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="acc in tableManager.$scope.Items">
+
+                                        <td>
+                                            <button class="btn " style="padding:1px 5px 1px 5px; background-color:rgba(0, 0, 0, 0);" type="button" ng-click="updateAccount(acc)"><i style="font-size:15px; text-align:right" class="fa pe-7s-edit"></i></button>
+                                            <button class="btn " style="padding:1px 5px 1px 5px; background-color:rgba(0, 0, 0, 0);" type="button" ui-sref="account_transactions({accountId: acc.Id})"><i style="font-size:15px; text-align:right" class="fa fa-edit"></i></button>
+                                            <button class="btn " style="padding:1px 5px 1px 5px; background-color:rgba(0, 0, 0, 0);" type="button" ng-click="deleteAccount(acc)"><i class="fa fa-trash-o"></i></button>
+                                        </td>
+
+                                        <td>{{acc.Name}}</td>
+                                        <td>{{acc.Balance | currency}}</td>
+                                        <td ng-if="acc.Balance != acc.ReconciledBalance" style="color:red">{{acc.ReconciledBalance | currency}}</td>
+                                        <td ng-if="acc.Balance == acc.ReconciledBalance">
+                                            <div class="col-lg-1 pe-7s-check" style="font-size:25px;color:green; padding-left:0px"></div>
+                                            <!--<div class="col-lg-9" style="color:green; padding-top:2px">This Account is Reconciled.</div>-->
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

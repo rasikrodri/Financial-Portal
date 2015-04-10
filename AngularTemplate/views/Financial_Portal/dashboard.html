@@ -1,0 +1,177 @@
+<!-- Header -->
+<div id="header" ng-include="'views/common/header.html'"></div>
+
+<!-- Navigation -->
+<aside id="menu" ng-include="'views/common/navigation.html'"></aside>
+
+<!-- Main Wrapper -->
+<div id="wrapper" ng-controller="dashboardController as dashboard" style="min-height: 900px;">
+
+    <div class="content" animate-panel effect="zoomIn" ng-hide="loading.At==99 && PageLoaded == true">
+        <div class="hpanel">
+            <h5 style="text-align:center">Loading Information {{loading.At}} %</h5>
+
+            <div class="m">
+                <!--<progressbar value="loading.percentage" type="success" class="progress-striped active full">{{loading.At}} %</progressbar>-->
+                <progressbar value="100" type="success" class="progress-striped active full"></progressbar>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" animate-panel effect="zoomIn" ng-if="loading.At==99 && PageLoaded != false">
+
+        <div class="row">
+            <div class="col-lg-4">
+
+                <div class="col-lg-12">
+
+                    <div class="hpanel" ng-if="dashboard.model.HoseholdAccounts.length==0" style="text-align:center">
+                        <h3 style="text-align:center"><strong>There are no Accounts</strong></h3>
+                        <a ui-sref="accounts_home" style="font-style:italic;text-decoration:underline;">Create a new account.</a>
+                    </div>
+
+                    <div class="hpanel" style="margin-bottom:0px" ng-controller="datepickerCtrl" ng-if="dashboard.model.HoseholdAccounts.length>0">
+                        <div class="panel-heading">
+                            <div panel-tools></div>
+                            Accounts on    {{dt  | date:'yyyy-MM-dd'}}
+                            <button type="button" style="padding:0px 4px 0px 5px; border-color:rgba(0, 0, 0, 0); background-color:rgba(0, 0, 0, 0);" class="btn btn-default" ui-sref="accounts_home"><i style="font-size:20px; color: #3F7941; text-align:right" class="fa fa-arrow-circle-o-right"></i></button>
+                        </div>
+                        <div class="panel-body list">
+                            <div class="table-responsive project-list">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Acount</th>
+                                            <th style="text-align:left">Reconciled</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="acc in dashboard.model.HoseholdAccounts">
+
+                                            <td>{{acc.Name}}</td>
+                                                <!--<pie-chart data="acc.SpendingsPie.data" options="acc.SpendingsPie.options"></pie-chart>--><!--{{acc.SpendingsPercent}}%-->{{acc.ReconciledBalance | currency}}
+                                                
+                                            <td>
+                                                {{acc.Balance | currency}}
+                                                <!--<i class="fa fa-level-up text-success" ng-if="acc.Balance >= acc.ReconciledBalance"></i>
+                                                <i class="fa fa-level-down text-danger" ng-if="acc.Balance < acc.ReconciledBalance"></i>-->
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+
+                    <!--<div class="hpanel" ng-if="dashboard.model.Latest_Transactions.length==0" style="text-align:center">
+                        <h3 style="text-align:center"><strong>There are no transactions.</strong></h3>
+                        <a ui-sref="accounts_home" style="font-style:italic;text-decoration:underline;">Create a new account.</a>
+                    </div>-->
+
+                    <div class="hpanel" style="margin-bottom:0px" ng-if="dashboard.model.Latest_Transactions.length>0">
+                        <div class="panel-heading">
+                            Last Activity
+                        </div>
+                        <div class="panel-body list" style="padding-top: 0px;padding-bottom: 0px;">
+
+                            <!--<div class="pull-right">
+                                <a href="#" class="btn btn-xs btn-default">Today</a>
+                                <a href="#" class="btn btn-xs btn-default">Month</a>
+                            </div>-->
+                            <!--<div class="panel-title">Last Activity</div>
+                            <small class="fo">This is simple example</small>-->
+                            <div class="list-item-container">
+                                <div class="list-item" ng-repeat="transaction in dashboard.model.Latest_Transactions">
+                                    <h3 class="no-margins font-bold " style="font-size:15px">{{transaction.Description}}</h3>
+                                    <!--<h3 class="no-margins font-extra-bold text-success">2,773</h3>-->
+
+                                    <div class="col-sm-6"><small>Reconciled {{transaction.ReconciledAmount | currency}}</small></div>
+                                    <div class="col-sm-6">
+                                        <div class="pull-right font-bold" style="text-align:right" ng-show="transaction.IsCredit==true">{{transaction.Amount | currency}} <i class="fa fa-plus-square-o text-success"></i></div>
+                                        <div class="pull-right font-bold text-danger" style="text-align:right" ng-show="transaction.IsCredit!=true">{{transaction.Amount | currency}} <i class="fa fa-minus-square-o text-danger"></i></div>
+                                    </div>
+                                    <div class="col-sm-6"><small>{{transaction.Updated | date}}</small></div>
+                                </div>
+                                <!--<div class="list-item">
+                                    <h3 class="no-margins font-extra-bold text-color3">4,422</h3>
+                                    <small>Last activity</small>
+                                    <div class="pull-right font-bold">13% <i class="fa fa-level-down text-color3"></i></div>
+                                </div>
+                                <div class="list-item">
+                                    <h3 class="no-margins font-extra-bold text-color3">9,180</h3>
+                                    <small>Monthly income</small>
+                                    <div class="pull-right font-bold">22% <i class="fa fa-bolt text-color3"></i></div>
+                                </div>
+                                <div class="list-item">
+                                    <h3 class="no-margins font-extra-bold text-success">1,450</h3>
+                                    <small>Tota Messages Sent</small>
+                                    <div class="pull-right font-bold">44% <i class="fa fa-level-up text-success"></i></div>
+                                </div>-->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-8">
+
+
+
+                <div class="col-lg-12">
+
+                    
+
+                    <div class="hpanel">
+                        <div class="panel-heading" ng-controller="datepickerCtrl">
+                            Budget Vs Spendings <!--<em>{{dt | date:'fullDate'}}</em>-->
+                            <!--<button type="button" style="padding:0px 4px 0px 5px" class="btn btn-default" ng-click="open($event)"><i style="font-size:15px" class="glyphicon glyphicon-calendar"></i></button>
+                            <div datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />-->
+                        </div>
+
+                        <div class="col-lg-12 panel-body">
+
+                           
+                            <div style="margin-bottom:50px" ng-if="dashboard.model.ShowMonthlyTransactions==true">
+                                <canvas barchart options="dashboard.model.BarChart.barOptions" data="dashboard.model.BarChart.barData" height="107" responsive=true></canvas>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="col-sm-4">
+                                    For this month<!--<br />-->
+                                    <div style="width:150px;">
+                                        Budget {{dashboard.model.IncomeTotal | currency}}
+                                        <span class="pull-right" style="width:18px;height:18px;background-color:#62cb31;color:black"></span>
+
+                                    </div>
+
+                                    <hr style="margin-top:8px;margin-bottom:8px"/>
+
+                                    <div style="width:150px">
+                                        Spendings {{dashboard.model.ExpensessTotal | currency}}
+                                        <span class="pull-right" style="width:18px;height:18px;background-color:rgba(255, 102, 0, .7);color:black"></span>
+
+                                    </div>
+                                </div>
+
+                                <!--<div class="hpanel">
+                                <div class="panel-body">-->
+                                <div>
+                                    <canvas doughnutchart options="dashboard.model.Donut.doughnutOptions" data="dashboard.model.Donut.doughnutData" height="140" responsive=true></canvas>
+                                </div>
+                                <!--</div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

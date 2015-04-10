@@ -1,0 +1,25 @@
+﻿<div class="inmodal">
+    <!--<div class="color-line"></div>-->
+    <div class="modal-header text-center">
+        <!--<i class="fa fa-sliders color-success h-modal-icon"></i>-->
+        <h4 class="modal-title">Change Account</h4>
+        <small class="font-bold">Please enter the new name for the account.</small>
+        <div class="row"></div>
+        <small style="color:red">{{error}}</small>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Account Name</label>
+            <div class="col-sm-8" style="width: 50%;"><input type="text" class="form-control" ng-model="NewAccountName" placeholder="Type Account Name..."></div>
+        </div>
+
+
+
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="ok()">Save changes</button>
+    </div>
+</div>
+

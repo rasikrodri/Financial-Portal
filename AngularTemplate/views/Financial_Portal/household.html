@@ -1,0 +1,190 @@
+<!-- Header -->
+<div id="header" ng-include="'views/common/header.html'"></div>
+
+<!-- Navigation -->
+<aside id="menu" ng-include="'views/common/navigation.html'"></aside>
+
+<!-- Main Wrapper -->
+<div id="wrapper" ng-controller="householdCtrl as household" style="min-height: 1019px;background-color:#C4DFC8">
+    <!--min-height: 1019px; keeps the size nice-->
+
+    <div class="content" animate-panel effect="zoomIn" ng-hide="loading.At==99 && PageLoaded == true">
+        <div class="hpanel">
+            <h5 style="text-align:center">Loading Information {{loading.At}} %</h5>
+
+            <div class="m">
+                <progressbar value="100" type="success" class="progress-striped active full"></progressbar>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" animate-panel effect="zoomIn" ng-if="loading.At==99 && PageLoaded != false">
+
+        <div class="hpanel">
+            <h3 style="text-align:center"><strong>{{household.Household.Name}}</strong></h3>
+        </div>
+
+        <!--<div class="row">
+            <div class="col-lg-12">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        <div panel-tools></div>
+                        Ui Grid basic example
+
+
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="gridStyle" ng-grid="gridOptions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="row">
+
+            <div class="col-lg-8" style="padding-left: 0px;padding-right: 0px;">
+                <div class="hpanel" style="margin-bottom: 0px;">
+                    <div class="panel-body" style="background:#E1F1E3">
+                        Total Users {{household.totalUsers}}
+
+
+                        <div class="table-responsive" style="max-height:150px;">
+                            <table class="table  table-striped" style=" background-color:#E1F1E3">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%;" ng-click="SortTable('Name')"><a>Name</a></th>
+                                        <th style="width: 40%;" ng-click="SortTable('Balance')"><a>Email</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="user in household.Household.Users">
+                                        <td>{{user.Name}}</td>
+                                        <td>{{user.Email}}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <style>
+                .infoColor {
+                    color: #272E27;
+                }
+
+                .fontDarkGreen {
+                    color: #064708;
+                }
+            </style>
+            <div class="col-lg-4">
+                <div class="hpanel">
+                    <div class="panel-heading hbuilt" style="color:#272E27">
+                        <!--<div panel-tools></div>-->
+                        About Households
+                    </div>
+                    <div class="panel-body infoColor">
+                        <div class="row">
+                            <div class="col-lg-6 border-right">
+                                <p style="font-size:10px">
+                                    Households are how we group accounts and users.
+                                </p>
+                                <p style="font-size:10px">
+                                    Each user belongs to only 1 household,
+                                    but the household can have many users.
+                                </p>
+                            </div>
+                            <div class="col-lg-6 ">
+                                <p style="font-size:10px">
+                                    Each user in your household has access to all account data.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="panel-footer">
+                        About Households
+                    </div>-->
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-5" animate-panel effect="zoomIn" style="">
+                <div class="row">
+                    <div class="hpanel">
+                        <div class="panel-heading hbuilt" style="background-color:#E1F1E3">
+                            <!--<div panel-tools></div> -->
+                            <h4><strong class="fontDarkGreen">Invite</strong></h4>
+                            <h6><strong class="fontDarkGreen">Invite another user to join your household</strong></h6>
+                        </div>
+                        <div class="panel-body" style="background-color:#E1F1E3">
+                            <form method="get" class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label fontDarkGreen">Email/UserName</label>
+                                    <div class="col-sm-9"><input style="" type="text" class="form-control" ng-model="household.UserToInvite.UserName"></div>
+                                </div>
+
+                                <!--<div class="hr-line-dashed"></div>-->
+
+                                <div class="form-group">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-10" style="text-align:right">
+                                        <button class="btn btn-default fontDarkGreen" ng-click="household.SendInvitation()">Send Invitation</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--<div class="row">
+
+            <div class="col-lg-12" animate-panel effect="zoomIn">
+                <div class="row">
+                    <div class="hpanel" style="background-color:#edf0f5">
+                        <div class="panel-heading hbuilt" style="background-color:#E1F1E3">
+                            <h4><strong class="fontDarkGreen">Leave</strong></h4>
+                            <h6><strong class="fontDarkGreen">Leave you current household and start a new one.</strong></h6>
+                        </div>
+                        <div class="panel-body" style="background-color:#E1F1E3">
+                            <form method="get" class="form-horizontal">
+
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" ng-model="account_transactions.TogleReconcile">
+                                                <strong class="fontDarkGreen">
+                                                    I understand that I will no longer have access to my household's sccounts.
+                                                </strong>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-sm-12" style="text-align:left">
+                                        <button class="btn btn-default fontDarkGreen" ng-click="account_transactions.Close()">Leave this household.</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>-->
+
+    </div>
+</div>

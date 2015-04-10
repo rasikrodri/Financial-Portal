@@ -1,0 +1,245 @@
+<!-- Header -->
+<div id="header" ng-include="'views/common/header.html'"></div>
+
+<!-- Navigation -->
+<aside id="menu" ng-include="'views/common/navigation.html'"></aside>
+
+<!-- Main Wrapper -->
+<div id="wrapper" ng-controller="account_transactionsCtrl as account_transactions" style="min-height: 1019px;">
+    <!--min-height: 1019px; keeps the size nice-->
+
+    <div class="content" animate-panel effect="zoomIn" ng-hide="loading.At==99 && PageLoaded == true">
+        <div class="hpanel">
+            <h5 style="text-align:center">Loading Information {{loading.At}} %</h5>
+
+            <div class="m">
+                <!--<progressbar value="loading.percentage" type="success" class="progress-striped active full">{{loading.At}} %</progressbar>-->
+                <progressbar value="100" type="success" class="progress-striped active full"></progressbar>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" ng-if="loading.At==99 && PageLoaded != false" ng-init="Animate(account_transactions.Account.Balance, account_transactions.Account.ReconciledBalance)">
+
+        <div class="hpanel">
+            <div class="col-sm-7">
+                <h3 style="text-align:center"><strong>Transactions in {{account_transactions.Account.Name}} Account</strong></h3>
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3">
+                <div class="panel-heading" style="margin-bottom:0px; padding-top:0px; padding-bottom:0px;">
+                    <table class="table table-condensed" style="margin-bottom:0px; width:30%">
+                        <!--table-bordered-->
+                        <thead>
+                            <tr>
+                                <th style="width:1%">Balance</th>
+                                <th style="width:1%">Reconciled</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td style="width:1%;font-size:20px" ng-show="BalanceAnim.At==BalanceTarget"> {{BalanceAnim.At | currency}}</td>
+                                <td style="width:1%;font-size:20px" ng-show="BalanceAnim.At!=BalanceTarget"> {{BalanceAnim.At | currency}}</td>
+
+                                <td style="width:1%;font-size:20px" ng-show="ReconciledBalanceAnim.At==ReconciledBalanceTarget"> {{ReconciledBalanceAnim.At | currency}}</td>
+                                <td style="width:1%;font-size:20px" ng-show="ReconciledBalanceAnim.At!=ReconciledBalanceTarget"> {{ReconciledBalanceAnim.At | currency}}</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .hr-line-dashed {
+                background-color: rgb(54, 95, 69);
+                border-top: 1px dotted #00FF14;
+                color: rgba(187, 82, 82, 0);
+                height: 1px;
+                margin: 80px 0 25px 0;
+            }
+        </style>
+        <div class="hr-line-dashed"></div>
+
+        <div class="row">
+
+            <div class="col-lg-4" animate-panel effect="zoomIn" ng-if="account_transactions.Creating_Editing_Transaction==true">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel-heading">
+                            <h4><strong>{{account_transactions.creatingOrEditingTransaction}}</strong></h4>
+                            <h6 ng-if="account_transactions.errorMessage!=''"><strong style="color:red">{{account_transactions.errorMessage}}</strong></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="hpanel">
+                        <div class="panel-body">
+                            <form method="get" class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Description</label>
+                                    <div class="row"></div>
+                                    <div class="col-sm-10"><input style="width:300px;" type="text" class="form-control" ng-model="account_transactions.Description"></div>
+                                </div>
+
+                                <!--<div class="hr-line-dashed"></div>-->
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Amount</label>
+                                    <div class="row"></div>
+                                    <div class="col-sm-5">
+                                        <input style="width:150px; {{account_transactions.credit_debit_amount_Color}}" type="text" class="form-control" ng-change="account_transactions.Amount = account_transactions.ConvertToCurrency(account_transactions.Amount)" ng-model="account_transactions.Amount" />
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-circle {{account_transactions.credit_debit_button_class_Color}}" style="width:60px;" ng-click="account_transactions.SwitchCreditOrDebit()">
+                                            <i ng-if="account_transactions.IsCredit==true" class="fa fa-plus"> credit</i>
+                                            <i ng-if="account_transactions.IsCredit==false" class="fa fa-minus"> debit</i>
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="checkbox"><label> <input type="checkbox" ng-model="account_transactions.TogleReconcile"> Reconcile </label></div>
+                                    </div>
+                                </div>
+
+                                <!--<div class="hr-line-dashed"></div>-->
+
+                                <div class="form-group" ng-if="account_transactions.TogleReconcile==true" ng-init="account_transactions.ReconciledAmount = account_transactions.GetReconcileAmount()">
+                                    <label class="col-sm-6 control-label" style="text-align:left">Reconciled Amount</label>
+                                    <div class="row"></div>
+                                    <div class="col-sm-10"><input style="width:150px" type="text" class="form-control" ng-change="account_transactions.ReconciledAmount = account_transactions.ConvertToCurrency(account_transactions.ReconciledAmount)" ng-model="account_transactions.ReconciledAmount" /></div>
+                                </div>
+
+                                <!--<div class="hr-line-dashed"></div>-->
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Category</label>
+                                    <div class="row"></div>
+                                    <div class="col-sm-10"><input style="width:300px" type="text" ng-model="account_transactions.SelectedCategory" typeahead="item.Name for item in account_transactions.Categories | filter:$viewValue | limitTo:8" class="form-control"></div>
+                                </div>
+
+                                <!--<div class="hr-line-dashed"></div>-->
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Date</label>
+                                    <div class="row"></div>
+                                    <div class="panel-heading" ng-controller="datepickerCtrl">
+                                        <button type="button" style="padding:0px 4px 0px 5px" class="btn btn-default" ng-click="open($event)"><i style="font-size:15px" class="glyphicon glyphicon-calendar"></i></button>
+                                        <div datepicker-popup="{{format}}" ng-model="account_transactions.Date" is-open="opened" min-date="'1900-01-01'" max-date="'3000-12-31'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                        <em>{{account_transactions.Date | date:'fullDate' }}</em>
+                                    </div>
+                                </div>
+
+                                <!--<div class="hr-line-dashed"></div>-->
+
+                                <div class="form-group">
+                                    <div class="col-sm-12 col-sm-offset-2">
+                                        <button class="btn btn-default" ng-click="account_transactions.Close()">Cancel</button>
+                                        <button class="btn btn-default" ng-click="account_transactions.Reset()">Reset</button>
+                                        <button class="btn btn-primary" ng-click="account_transactions.SaveTransaction()"><div ng-if="account_transactions.creatingOrEditingTransaction=='Creating Transaction'">Save</div><div ng-if="account_transactions.creatingOrEditingTransaction=='Editing Transaction'">Update</div></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{account_transactions.ColumnTransactionsSize}}" animate-panel effect="zoomIn">
+                <div class="hpanel" style="margin-bottom:10px;">
+
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button style="margin-top:10px" class="btn btn-success " ng-if="account_transactions.Creating_Editing_Transaction==false" type="button" ng-click="account_transactions.ShowCreateTransactionEditor()"><i class="fa fa-plus"></i> Create Transaction</button>
+                        </div>
+
+                        <div class="col-sm-4" style="text-align:left"><input type="text" style="width:100%;margin-top: 15px" ng-model="pagingOptions.searchText" ng-change="GetAccounts()" placeholder="Search Here..."></div>
+                        <div class="col-sm-6">
+                            <style>
+                                /*Remove the border from the table*/
+                                .gridStyle {
+                                    border: none;
+                                    height: 0px;
+                                }
+                                /*rremove boreder and color from footer of the table*/
+                                .ngFooterPanel {
+                                    border-top: none;
+                                    background-color: rgba(234, 234, 234, 0);
+                                }
+                                /*Make headers vertical bar invisible*/
+                                .ngVerticalBarVisible {
+                                    background-color: rgba(212, 212, 212, 0);
+                                }
+                                /*Asign the color of the header text*/
+                                .ngHeaderText {
+                                    color: #34495e;
+                                }
+                                /*The top pannel of the ng-grid*/
+                                .ngTopPanel {
+                                    height: 0px;
+                                    background: rgba(212, 212, 212, 0);
+                                    border-bottom: none;
+                                    max-height: 0px;
+                                }
+
+                                .ngHeaderContainer {
+                                    max-height: 0px;
+                                }
+                                /*Hide the colimns and rows areas*/
+                                .ngViewport {
+                                    overflow: hidden;
+                                    min-height: 0px;
+                                    max-height: 0px;
+                                }
+                            </style>
+                            <div class="gridStyle" ng-grid="tableManager.$scope.gridOptions"></div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="row">
+                        <div class="panel-body">
+                            <div class="table-responsive" style="max-height:600px">
+                                <table class="table table table-bordered table-striped">
+                                    <!--table-bordered-->
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Category</th>
+                                            <th>Amount</th>
+                                            <th>Reconciled</th>
+                                            <th>Updated By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr ng-repeat="transaction in tableManager.$scope.Items" ng-controller="datepickerCtrl">
+
+                                            <td>
+                                                <button class="btn " style="padding:1px 5px 1px 5px; background-color:rgba(0, 0, 0, 0);" type="button" ng-click="account_transactions.ShowExistingTransactionEditor(transaction)"><i style="font-size:15px; text-align:right" class="fa fa-edit"></i></button>
+                                                <button class="btn " style="padding:1px 5px 1px 5px; background-color:rgba(0, 0, 0, 0);" type="button" ng-click="account_transactions.DeleteTransaction(transaction)"><i class="fa fa-trash-o"></i></button>
+                                            </td>
+                                            <td>{{transaction.Date  | date:'fullDate' }}</td>
+                                            <td>{{transaction.Description}}</td>
+                                            <td>{{transaction.Category.Name}}</td>
+                                            <td ng-class="!transaction.IsCredit ? 'bad' : 'good' ">{{transaction.Amount | currency}}</td>
+                                            <td ng-class="transaction.ReconciledAmount!=transaction.Amount ? 'bad' : 'good' ">{{transaction.ReconciledAmount | currency}}</td>
+                                            <td>{{transaction.UpdatedByUser.Name}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

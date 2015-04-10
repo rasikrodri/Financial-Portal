@@ -1,0 +1,184 @@
+<!-- Header -->
+<div id="header" ng-include="'views/common/header.html'"></div>
+
+<!-- Navigation -->
+<aside id="menu" ng-include="'views/common/navigation.html'"></aside>
+
+<!-- Main Wrapper -->
+<div id="wrapper" ng-controller="my_budgetCtrl as budget_controller" style="min-height: 1019px;">
+    <!--min-height: 1019px; keeps the size nice-->
+
+    <div class="content" animate-panel effect="zoomIn" ng-hide="loading.At==99 && PageLoaded == true">
+        <div class="hpanel">
+            <h5 style="text-align:center">Loading Information{{loading.At}} %</h5>
+
+            <div class="m">
+                <progressbar value="100" type="success" class="progress-striped active full"></progressbar>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" animate-panel effect="zoomIn" ng-if="loading.At==99 && PageLoaded != false">
+
+        <div class="hpanel">
+            <h3 style="text-align:center"><strong>My Budget</strong></h3>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-8">
+
+                <div class="hpanel" style="margin-bottom:10px;">
+                    <div class="panel-heading">
+                        <!--<div panel-tools></div>-->
+                        Income
+                        <!--<button class="btn btn-success " type="button" ng-click="createAccount()"><i class="fa fa-plus"></i> Add Account</button>-->
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive" style="max-height:150px">
+                            <table class="table table table-bordered table-striped">
+                                <!--table-bordered-->
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th style="width: 25%;">Description</th>
+                                        <th style="width: 25%;">Category</th>
+                                        <th style="width: 25%;">Amount</th>
+                                        <th style="width: 25%;">Anual Frequency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="item in budget_controller.model.Income">
+
+                                        <td>
+                                            <button class="btn " style="padding:1px 5px 1px 5px; background-color:rgba(0, 0, 0, 0);" type="button" ng-click="budget_controller.Delete(item)"><i class="fa fa-trash-o"></i></button>
+                                        </td>
+                                        <td>{{item.Description}}</td>
+                                        <td>{{item.Category.Name}}</td>
+                                        <td>{{item.Amount | currency}}</td>
+                                        <td>{{item.AnualFrequency}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hpanel">
+                    <div class="panel-heading" style="padding-top:0px">
+                        Expenses
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive" style="max-height:250px">
+                            <table class="table table table-bordered table-striped">
+                                <!--table-bordered-->
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th style="width: 25%;">Description</th>
+                                        <th style="width: 25%;">Category</th>
+                                        <th style="width: 25%;">Amount</th>
+                                        <th style="width: 25%;">Anual Frequency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="item in budget_controller.model.Expenses">
+
+                                        <td>
+                                            <button class="btn " style="padding:1px 5px 1px 5px; background-color:rgba(0, 0, 0, 0);" type="button" ng-click="budget_controller.Delete(item)"><i class="fa fa-trash-o"></i></button>
+                                        </td>
+                                        <td>{{item.Description}}</td>
+                                        <td>{{item.Category.Name}}</td>
+                                        <td style="color:darkorange">-{{item.Amount | currency}}</td>
+                                        <td>{{item.AnualFrequency}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        <!--<div panel-tools></div>-->
+                        Add Income / Expenses
+                    </div>
+                    <div class="panel-body">
+                        <form method="get" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" checked="" ng-model="budget_controller.model.TypeToAdd" value="Expense">
+                                                Expense
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" ng-model="budget_controller.model.TypeToAdd" value="Income">
+                                                Income
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Category</label>
+                                <div class="row"></div>
+                                <div class="col-sm-10"><input style="" type="text" ng-model="budget_controller.model.SelectedCategory" typeahead="item.Name for item in budget_controller.model.Categories | filter:$viewValue | limitTo:8" class="form-control"></div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Description</label>
+                                <div class="row"></div>
+                                <div class="col-sm-10"><input style="" type="text" class="form-control" ng-model="budget_controller.model.Description"></div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Amount</label>
+                                <div class="row"></div>
+                                <div class="col-sm-10"><input style="width:150px" type="text" class="form-control" ng-change="budget_controller.ConvertToCurrency()" ng-model="budget_controller.model.IncomeExpenseAmount" /></div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-12 control-label" style="text-align:left">Anual Frequency</label>
+                                <div class="row"></div>
+                                <div class="col-sm-10"><input type="number" class="form-control" ng-model="budget_controller.model.AnualFrequency" style="width:100px"></div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <button class="btn btn-default" ng-click="budget_controller.Clear()">Clear</button>
+                                    <button class="btn btn-primary" ng-click="budget_controller.Save()">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,97 @@
+<!--<div class="color-line">
+</div>-->
+<!--<div id="logo" class="light-version">
+        <span>
+            Homer Angular App
+        </span>
+</div>-->
+<nav role="navigation">
+        <minimaliza-menu></minimaliza-menu>
+    <div class="small-logo">
+        <span class="text-primary">Financial Portal</span>
+    </div>
+    <!--<form role="search" class="navbar-form-custom" method="post" action="#">
+        <div class="form-group">
+            <input type="text" placeholder="Search something special" class="form-control" name="search">
+        </div>
+    </form>-->
+    <div class="navbar-right" ng-controller="notificationsCtrl as notificationsCtrl">
+        <ul class="nav navbar-nav no-borders">
+            <li class="dropdown" dropdown>
+
+                <!--<a class="dropdown-toggle" href="#" dropdown-toggle>-->
+                <i class="">{{notificationsCtrl.User.UserName}}</i>
+                <!--</a>-->
+                <!--<a class="dropdown-toggle" href="#" dropdown-toggle>
+                    <i class="pe-7s-speaker"></i>
+                </a>-->
+                <!--<ul class="dropdown-menu hdropdown notification animated flipInX">
+                    <li>
+                        <a>
+                            <span class="label label-success">NEW</span> It is a long established.
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span class="label label-warning">WAR</span> There are many variations.
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <span class="label label-danger">ERR</span> Contrary to popular belief.
+                        </a>
+                    </li>
+                    <li class="summary"><a href="#">See all notifications</a></li>
+                </ul>-->
+            </li>
+            <li class="dropdown" dropdown ng-show="notificationsCtrl.User.Notifications.length>0">
+                <a class="dropdown-toggle label-menu-corner" href="#" dropdown-toggle>
+                    <i class="fa fa-comments-o"></i>
+                    <span class="label label-success animated  infinite shake">{{notificationsCtrl.User.Notifications.length}}</span>
+                </a>
+                <ul class="dropdown-menu hdropdown animated flipInX">
+                    <div class="title">
+                        You have {{notificationsCtrl.User.Notifications.length}} household invitation.
+                    </div>
+
+                    <li ng-repeat="item in User.Notifications">
+                        <a ng-click="WhantToJoinHousehold(item)">
+                            {{notificationsCtrl.item.FromUser_Name}} invited you to join his household.
+                        </a>
+                    </li>
+
+                    <!--<li>
+                <a>
+                    It is a long established.
+                </a>
+            </li>
+            <li>
+                <a>
+                    There are many variations.
+                </a>
+            </li>
+            <li>
+                <a>
+                    Lorem Ipsum is simply dummy.
+                </a>
+            </li>
+            <li>
+                <a>
+                    Contrary to popular belief.
+                </a>
+            </li>-->
+                    <!--<li class="summary"><a href="#">See All Messages</a></li>-->
+                </ul>
+            </li>
+            <li class="dropdown" ng-controller="registerController as account">
+                <a ui-sref="common.login" ng-click="account.logout()">
+                    <i class="pe-7s-upload pe-rotate-90"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
+

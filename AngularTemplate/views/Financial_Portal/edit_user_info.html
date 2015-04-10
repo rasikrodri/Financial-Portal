@@ -1,0 +1,82 @@
+<!-- Header -->
+<div id="header" ng-include="'views/common/header.html'"></div>
+
+<!-- Navigation -->
+<aside id="menu" ng-include="'views/common/navigation.html'"></aside>
+
+<!-- Main Wrapper -->
+<div id="wrapper" ng-controller="edit_user_InfoCtrl as userinfoCtrl" style="min-height: 1019px;background-color:#C4DFC8">
+    <!--min-height: 1019px; keeps the size nice-->
+
+    <div class="content" animate-panel effect="zoomIn" ng-hide="loading.At==99 && PageLoaded == true">
+        <div class="hpanel">
+            <h5 style="text-align:center">Loading Information {{loading.At}} %</h5>
+
+            <div class="m">
+                <progressbar value="100" type="success" class="progress-striped active full"></progressbar>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" animate-panel effect="zoomIn" ng-if="loading.At==99 && PageLoaded != false">
+
+        <div class="hpanel">
+            <h3 style="text-align:center"><strong>{{userinfoCtrl.model.UserName}}</strong></h3>
+        </div>
+
+            <div class="row">
+                <div class="hpanel">
+                    <div class="panel-heading hbuilt" style="background-color:#E1F1E3">
+                        <!--<div panel-tools></div> -->
+                        <h4><strong class="fontDarkGreen">Update your information</strong></h4>
+                    </div>
+                    <div class="panel-body" style="background-color:#E1F1E3">
+                        <form method="get" class="form-horizontal">
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label fontDarkGreen">Name</label>
+                                <div class="col-sm-9"><input style="" type="text" class="form-control" ng-model="userinfoCtrl.model.Name"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10" style="text-align:right">
+                                    <button class="btn btn-default fontDarkGreen" ng-disabled="userinfoCtrl.model.Name == ''" ng-click="userinfoCtrl.UpdateUserInfo()">Update user information</button>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed" style="border-top: 1px dotted #178E1F;"></div>
+
+                            <h4><strong class="fontDarkGreen">Change your password</strong></h4>
+                            <h4><strong class="fontDarkGreen">{{userinfoCtrl.model.passwordchangemessage}}</strong></h4>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label fontDarkGreen">Old Password</label>
+                                <div class="col-sm-9">
+                                    <input style="" type="password" class="form-control" ng-model="userinfoCtrl.model.OldPassword">
+                                    <span class="has-error" ng-repeat="error in userinfoCtrl.errors['model.OldPassword']">{{error}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label fontDarkGreen">New Password</label>
+                                <div class="col-sm-9">
+                                    <input style="" type="password" class="form-control" ng-model="userinfoCtrl.model.NewPassword">
+                                    <span class="has-error" ng-repeat="error in userinfoCtrl.errors['model.NewPassword']">{{error}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label fontDarkGreen">New Password Confirmation</label>
+                                <div class="col-sm-9"><input style="" type="password" class="form-control" ng-model="userinfoCtrl.model.NewPasswordConfirmation"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10" style="text-align:right">
+                                    <button class="btn btn-default fontDarkGreen" ng-disabled="userinfoCtrl.model.OldPassword==''||userinfoCtrl.model.NewPassword==''||userinfoCtrl.model.NewPasswordConfirmation==''||userinfoCtrl.model.NewPassword!=userinfoCtrl.model.NewPasswordConfirmation" ng-click="userinfoCtrl.ChangePassword()">Change Password</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
