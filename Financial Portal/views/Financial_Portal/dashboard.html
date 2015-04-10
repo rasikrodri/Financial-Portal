@@ -50,13 +50,8 @@
                                         <tr ng-repeat="acc in dashboard.model.HoseholdAccounts">
 
                                             <td>{{acc.Name}}</td>
-                                                <!--<pie-chart data="acc.SpendingsPie.data" options="acc.SpendingsPie.options"></pie-chart>--><!--{{acc.SpendingsPercent}}%-->{{acc.ReconciledBalance | currency}}
-                                                
-                                            <td>
-                                                {{acc.Balance | currency}}
-                                                <!--<i class="fa fa-level-up text-success" ng-if="acc.Balance >= acc.ReconciledBalance"></i>
-                                                <i class="fa fa-level-down text-danger" ng-if="acc.Balance < acc.ReconciledBalance"></i>-->
-                                            </td>
+                                            <td>{{acc.ReconciledBalance | currency}}</td>
+                                            <td>{{acc.Balance | currency}}</td>
 
                                         </tr>
                                     </tbody>
