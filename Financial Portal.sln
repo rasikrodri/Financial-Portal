@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Financial Portal", "AngularTemplate\Financial Portal.csproj", "{4D1DF96C-613B-4A1A-AE92-5AB29A580713}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Financial Portal", "Financial Portal\Financial Portal.csproj", "{4D1DF96C-613B-4A1A-AE92-5AB29A580713}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseBuilder", "DatabaseBuilder\DatabaseBuilder.csproj", "{EA4E7663-9AC9-4D4F-9BEB-6C28F54AA0AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseBuilder", "Database Builder\DatabaseBuilder.csproj", "{EA4E7663-9AC9-4D4F-9BEB-6C28F54AA0AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
