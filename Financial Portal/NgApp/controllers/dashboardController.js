@@ -134,6 +134,7 @@ angular
                     animationEasing: "easeOutBounce",
                     animateRotate: true,
                     animateScale: false,
+                    tooltipTemplate: "% <%= value %>"
                 };
 
 
@@ -141,6 +142,7 @@ angular
 
             this.Setup_BarChart_Data = function (months) {
                 scope.model.BarChart.barOptions = {
+                    showTooltips: false,
                     scaleBeginAtZero: true,
                     scaleShowGridLines: true,
                     scaleGridLineColor: "rgba(0,0,0,.05)",
@@ -149,6 +151,7 @@ angular
                     barStrokeWidth: 1,
                     barValueSpacing: 5,
                     barDatasetSpacing: 1,
+                    multiTooltipTemplate: "$ <%= value %>"
                 };
 
                 var credits = [];
@@ -176,7 +179,7 @@ angular
                 
                 for (var i = 0; i < months.length; i++) {
                     var date = new Date(months[i].Value[0].Updated);
-                    lables.push(scope.GetMonthName(date.getMonth() + 1)+ ' ' + date.getFullYear());//In Date January is 0
+                    lables.push(scope.GetMonthName(date.getMonth() + 1) + ' ' + date.getFullYear() + '  C(' + sharedDataSvc.ConvertToCurrency(credits[i]) + ')  D(' + sharedDataSvc.ConvertToCurrency(debits[i]) +')');//In Date January is 0
                 }
 
                 scope.model.BarChart.barData = {
@@ -211,29 +214,29 @@ angular
                 switch(monthNum)
                 {
                     case 1:
-                        return 'January';
+                        return 'Jan';
                     case 2:
-                        return 'February';
+                        return 'Feb';
                     case 3:
-                        return 'March';
+                        return 'Mar';
                     case 4:
-                        return 'April';
+                        return 'Apr';
                     case 5:
                         return 'May';
                     case 6:
-                        return 'June';
+                        return 'Jun';
                     case 7:
                         return 'July';
                     case 8:
-                        return 'August';
+                        return 'Aug';
                     case 9:
-                        return 'September';
+                        return 'Sept';
                     case 10:
-                        return 'October';
+                        return 'Oct';
                     case 11:
-                        return 'November';
+                        return 'Nov';
                     case 12:
-                        return 'December';
+                        return 'Dec';
                     default:
                         return 'Error';
                 }
