@@ -19,7 +19,7 @@ namespace AngularTemplate.Models.Database
         public string SecurityStamp { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsLockedOut { get; set; }
-        public string AccountActivationToken { get; set; }
+        public string AccountConfirmationToken { get; set; }
         public string PasswordResetToken { get; set; }
         public DateTimeOffset PasswordResetExpiry { get; set; }
         public DateTimeOffset LockoutEndDate { get; set; }

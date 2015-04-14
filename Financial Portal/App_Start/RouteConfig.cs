@@ -18,6 +18,14 @@ namespace AngularTemplate
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("");
+            routes.MapRoute(
+                name: "OnePageAplication",
+                url: "#/{state}/{parameters}",
+                defaults: new { state = "Home", parameters = UrlParameter.Optional }
+            );
         }
     }
 }

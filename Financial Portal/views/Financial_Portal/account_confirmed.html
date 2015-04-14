@@ -1,0 +1,24 @@
+<!--<div class="color-line"></div>-->
+<!--<div class="pull-left m">
+    <a ui-sref="dashboard" class="btn btn-primary">Back to Dashboard</a>
+</div>-->
+
+<div class="login-container" animate-panel effect="zoomIn">
+    <!--ng-controller="acccountconfirmedController as acc_conf_CTRL">-->
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="text-center m-b-md" ng-if="result=='OK'">
+                <h3>{{Message}}</h3>
+                <small>{{ToDo}}</small>
+                <a ng-click="Redirect(2)"><small>Or click here!</small></a>
+            </div>
+            <div class="text-center m-b-md" ng-if="result=='ERROR'">
+                <h3 style="color:red">{{Message}}</h3>
+                <small style="color:red">{{ToDo}}</small>
+                <!--<small style="color:red"> </small>-->
+            </div>
+
+        </div>
+    </div>
+</div>

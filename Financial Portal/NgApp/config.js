@@ -32,7 +32,7 @@ function configState($stateProvider, $urlRouterProvider, $compileProvider, $loca
                 specialClass: 'blank',
 
                 Authorize: 'Anonymous'
-            }
+            }            
         })
         .state('common.register', {
             url: "/register",
@@ -159,6 +159,28 @@ function configState($stateProvider, $urlRouterProvider, $compileProvider, $loca
                 Authorize: 'All'
             }
         })
+
+
+    //account confirmation
+
+        .state('account_confirmed', {
+            url: "/account_confirmed?token&email",
+            templateUrl: "views/Financial_Portal/account_confirmed.html",
+            controller: "acccountconfirmedController",
+            data: {
+                pageTitle: 'Account Congfirmed',
+
+                Authorize: 'Anonymous'
+            },
+            resolve: {
+                message: ['$stateParams', '$http', '$q', function ($stateParams, $http, $q) {
+                    var params = { token: $stateParams.token, email: $stateParams.email };
+                    return $http.post('/api/Account/confirm_user', params).then(function(response){
+                        return response.data;
+                    });
+                }]
+        }
+    })
 
 
 

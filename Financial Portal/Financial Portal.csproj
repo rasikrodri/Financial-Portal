@@ -233,6 +233,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NgApp\controllers\acccount_confirmed.js" />
     <Content Include="NgApp\controllers\notifications.js" />
     <Content Include="NgApp\controllers\account_transactions.js" />
     <Content Include="NgApp\controllers\edit_user_info.js" />
@@ -3353,6 +3354,7 @@
     <Content Include="views\Financial_Portal\account_transactions.html" />
     <Content Include="views\Financial_Portal\edit_user_info.html" />
     <Content Include="views\Financial_Portal\household.html" />
+    <Content Include="views\Financial_Portal\account_confirmed.html" />
     <Content Include="views\Financial_Portal\reset_password.html" />
     <Content Include="views\Financial_Portal\modal_update_account.html" />
     <Content Include="views\Financial_Portal\my_budget.html" />

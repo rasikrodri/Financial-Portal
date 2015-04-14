@@ -342,20 +342,83 @@ namespace AngularTemplate.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { Name = model.Name, UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { Name = model.Name, UserName = model.Email, Email = model.Email };            
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-            //var callbackUrl = Url.Route("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-
-            //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-
+            
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
 
+            string token = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            user.AccountConfirmationToken = token;
+
+            var i = HttpContext.Current.GetOwinContext().Get<SqlConnection>().As<IHouseholdDataAccess>();
+            await i.UpdateUser(user);
+
+            //HttpServerUtility.un
+            var url = Url.Link("OnePageAplication", new { state = "account_confirmed", token = token, email = user.Email });
+            //var url = Url.Link("Default", new { Controller = "#/common", Action = "account_confirmed", activationToken = token });
+            //Replace the first '%23' with '#' because it gets automatically converted to '%23'
+            int start = url.IndexOf("%23");
+            url = url.Substring(0, start) + "#" + url.Substring(start + 3);
+            SendEmail("Activate your account", "Activate your account by clicking <a href=\"" + url + "\">here</a>", user.Email, true);
+
             return Ok();
         }
+
+        // POST api/Account/Register
+        [AllowAnonymous]
+        [Route("is_account_confirmed")]
+        public async Task<string> GetIfAccountIsConfirmed(string username)
+        {
+            var user = await i.FindUserByUserNameAsync(username);
+            //var user = await i.FindUserByActivationToken(confirmObj.token);
+
+            if (user == null)
+            {
+                return "ERROR!, Make sure you are a registered user and that you have confirmed your email adress!";
+            }
+
+            if(user.EmailConfirmed == false)
+            {
+                return "ERROR!, Make sure you are a registered user and that you have confirmed your email adress!";
+            }
+
+            return "OK";
+        }
+
+        public class emailConfirm
+        {
+            public string token{ get; set; }
+            public string email { get; set; }
+        }
+        // POST api/Account/Register
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("confirm_user")]
+        public async Task<string> ConfirmUserFromEmailLink(emailConfirm confirmObj)
+        {
+
+            var user = await i.FindUserByActivationToken(confirmObj.token);
+
+            if (user == null || user.Email != confirmObj.email)
+            {
+                return "ERROR";
+                //return "Invalid user";
+            }
+
+
+            user.EmailConfirmed = true;
+            user.AccountConfirmationToken = "";
+
+            var h = HttpContext.Current.GetOwinContext().Get<SqlConnection>().As<IHouseholdDataAccess>();
+            await h.UpdateUser(user);
+
+            return "OK";
+        }
+        
 
         // POST api/Account/Register
         //[AllowAnonymous]
@@ -386,28 +449,7 @@ namespace AngularTemplate.Controllers
         }
         
 
-        // POST api/Account/Register
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("confirm_user")]
-        public async Task<string> ConfirmUserFromEmailLink(string activationToken)
-        {
-            
-
-            var user = await i.FindUserByActivationToken(activationToken);
-
-            if(user == null)
-            {
-                return "Invalid user";
-            }
-            user.EmailConfirmed = true;
-            //Regenerate the token and compare to see if they are the same
-            string generatedCode = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-
-            
-
-            return "Your Account has been activated.";
-        }
+        
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
