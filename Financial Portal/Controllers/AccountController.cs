@@ -623,7 +623,7 @@ namespace AngularTemplate.Controllers
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                Credentials = new NetworkCredential("rasikfinancialportal@gmail.com", "Rodr1ras1k1!"),
+                Credentials = new NetworkCredential("rasikfinancialportal@gmail.com", "!Garibaldy!Greco"),
                 Timeout = 3000
             };
 
